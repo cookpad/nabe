@@ -1,6 +1,0 @@
-use_frameworks!
-target 'Nabe_Tests' do
-  pod 'Nabe', :path => '../'
-  
-  
-end
