@@ -19,7 +19,7 @@ class NabeRxTests: XCTestCase {
     func testGithubUserProfile() {
         wait { exp in
             let observable = Github.User(username: "cookpad").call()
-            observable.subscribe(onNext: { result, response in
+            _ = observable.subscribe(onNext: { result, response in
                 switch result {
                     case let .success(value):
                         print(value)

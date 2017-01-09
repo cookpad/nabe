@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'Nabe'
   s.version          = '0.1.0'
-  s.summary          = 'Network and Model Layer for Cookpad Global-iOS'
+  s.summary          = 'Network and model Layers for Cookpad Global-iOS'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+                       Nabe is an abstraction layer that covers network and model layers for Cookpad Global-iOS.
                        DESC
   s.homepage         = 'https://github.com/cookpad/nabe'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
