@@ -16,7 +16,7 @@ class NabeRxTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGithubUserProfile() {
+    func testGithubUser() {
         wait { exp in
             let observable = Github.User(username: "cookpad").call()
             _ = observable.subscribe(onNext: { result, response in

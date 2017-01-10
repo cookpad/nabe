@@ -1,8 +1,7 @@
 import Foundation
 import Result
 
-public protocol Callable : Deserializable {
-}
+public protocol Callable : Deserializable { }
 
 public extension Callable {
     func performTask(with request: URLRequest,
@@ -11,7 +10,7 @@ public extension Callable {
                            parseFailure: @escaping (RequestError, HTTPURLResponse?) -> (),
                            finish: @escaping (Void) -> () = {}) -> URLSessionDataTask {
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard var response = response as? HTTPURLResponse else {
+            guard let response = response as? HTTPURLResponse else {
                 let error = RequestError(kind: .unknown)
                 failure(error, nil)
                 finish()
@@ -19,13 +18,13 @@ public extension Callable {
             }
 
             let intercept = compose(Nabe.responseInterceptors.map { $0.intercept })
-            
-            response = intercept(response)
-            if !(200..<300 ~= response.statusCode) {
-                let error = RequestError(kind: RequestError.ErrorKind(rawValue: response.statusCode)!)
-                failure(error, response)
-            } else if let data = data, let result = self.deserialize(data: data)  {
-                success(result, response)
+            let (interceptedData, interceptedResponse) = intercept((data, response))
+
+            if !(200..<300 ~= interceptedResponse.statusCode) {
+                let error = RequestError(kind: RequestError.ErrorKind(rawValue: interceptedResponse.statusCode)!)
+                failure(error, interceptedResponse)
+            } else if let data = interceptedData, let result = self.deserialize(data: data)  {
+                success(result, interceptedResponse)
             } else {
                 let error = RequestError(kind: .deserialization)
                 parseFailure(error, response)
@@ -44,8 +43,8 @@ public protocol RequestCallable : RequestConstructable, Callable {
 
 public extension RequestCallable {
     func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ()) {
-        guard let request = self.createRequest() else {
-            let error = RequestError(kind: .unknown)
+        guard let request = createRequest() else {
+            let error = RequestError(kind: .cannotCreateRequest)
             handler(.failure(error), nil)
             return
         }

@@ -9,6 +9,8 @@ public enum HTTPMethod: String {
 
 public struct RequestError: Error {
     enum ErrorKind: Int {
+        case cannotCreateRequest = -1001
+        
         case unknown = -1
 
         case badRequest = 400

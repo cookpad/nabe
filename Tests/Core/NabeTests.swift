@@ -4,7 +4,8 @@ import XCTest
 class NabeTests: XCTestCase {
 
     override static func setUp() {
-        Nabe.requestInterceptors.append(CURLRequestInterceptor(tag: "CURL log"))
+        Nabe.requestInterceptors.append(CURLRequestInterceptor(tag: "CURL"))
+        Nabe.responseInterceptors.append(StringResponseInterceptor(tag: "Response"))
     }
     
     override func tearDown() {
@@ -16,11 +17,10 @@ class NabeTests: XCTestCase {
         wait { exp in
             HTTPBin.Get().call { result, response in
                 switch result {
-                    case let .success(value):
-                        print(value)
-                        XCTAssert(true)
-                    case .failure:
-                        XCTAssert(false)
+                case .success:
+                    XCTAssert(true)
+                case .failure:
+                    XCTAssert(false)
                 }
                 exp.fulfill()
             }
@@ -31,8 +31,7 @@ class NabeTests: XCTestCase {
         wait { exp in
             HTTPBin.Post().call { result, response in
                 switch result {
-                case let .success(value):
-                    print(value)
+                case .success:
                     XCTAssert(true)
                 case .failure:
                     XCTAssert(false)
@@ -46,8 +45,7 @@ class NabeTests: XCTestCase {
         wait { exp in
             HTTPBin.Put().call { result, response in
                 switch result {
-                case let .success(value):
-                    print(value)
+                case .success:
                     XCTAssert(true)
                 case .failure:
                     XCTAssert(false)
@@ -61,8 +59,7 @@ class NabeTests: XCTestCase {
         wait { exp in
             HTTPBin.Delete().call { result, response in
                 switch result {
-                case let .success(value):
-                    print(value)
+                case .success:
                     XCTAssert(true)
                 case .failure:
                     XCTAssert(false)
@@ -93,7 +90,7 @@ extension HTTPBin {
         let baseURL: URL = url
         let method: HTTPMethod = .post
         let path: String = "/post"
-        let queryParam: [String : Any] = ["foo": "bar"]
+        let body: [String : Any] = ["foo": "bar"]
     }
 
     struct Put : RequestCallable {
@@ -102,7 +99,7 @@ extension HTTPBin {
         let baseURL: URL = url
         let method: HTTPMethod = .put
         let path: String = "/put"
-        let queryParam: [String : Any] = ["foo": "bar"]
+        let body: [String : Any] = ["foo": "bar"]
     }
 
     struct Delete : RequestCallable {
