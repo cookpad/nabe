@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'Nabe'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'Network and model Layers for Cookpad Global-iOS'
 
 # This description is used to generate tags and improve search results.
