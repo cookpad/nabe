@@ -5,7 +5,7 @@ public protocol RequestInterceptor {
 }
 
 public protocol ResponseInterceptor {
-    func intercept(meta: (Data?, HTTPURLResponse)) -> (Data?, HTTPURLResponse)
+    func intercept(response: HTTPURLResponse, data: Data?) -> HTTPURLResponse
 }
 
 public struct CURLRequestInterceptor : RequestInterceptor {
@@ -60,13 +60,13 @@ public struct StringResponseInterceptor : ResponseInterceptor {
     public init() {
         tag = "StringResponseInterceptor"
     }
-    
-    public func intercept(meta: (Data?, HTTPURLResponse)) -> (Data?, HTTPURLResponse) {
-        if let data = meta.0 {
+
+    public func intercept(response: HTTPURLResponse, data: Data?) -> HTTPURLResponse {
+        if let data = data {
             print("\(tag) <-- \n \(String(data: data, encoding: .utf8) ?? "")")
         } else {
             print("\(tag) <-- \n <no data>")
         }
-        return meta
+        return response
     }
 }

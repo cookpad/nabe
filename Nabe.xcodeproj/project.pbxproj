@@ -24,6 +24,7 @@
 		FA21B07B1E221FF500D235C7 /* Nabe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA21B0001E20F29600D235C7 /* Nabe.framework */; };
 		FA21B07C1E22201D00D235C7 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA21B03A1E221B9D00D235C7 /* RxSwift.framework */; };
 		FA21B07D1E22210A00D235C7 /* Nabe.h in Headers */ = {isa = PBXBuildFile; fileRef = FA21B04A1E221DCD00D235C7 /* Nabe.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA88691C1E2A036300AD02EC /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA88691B1E2A036300AD02EC /* RequestError.swift */; };
 		FA9AC16A1E225E32001E84E5 /* Nabe.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA21B0001E20F29600D235C7 /* Nabe.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -78,6 +79,7 @@
 		FA21B0751E221FAC00D235C7 /* NabeRxTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NabeRxTests.swift; sourceTree = "<group>"; };
 		FA21B0771E221FD800D235C7 /* Callable+Rx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Callable+Rx.swift"; sourceTree = "<group>"; };
 		FA21B0781E221FD800D235C7 /* NabeRx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NabeRx.h; sourceTree = "<group>"; };
+		FA88691B1E2A036300AD02EC /* RequestError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 				FA21B04A1E221DCD00D235C7 /* Nabe.h */,
 				FA21B04B1E221DCD00D235C7 /* Nabe.swift */,
 				FA21B04C1E221DCD00D235C7 /* Request.swift */,
+				FA88691B1E2A036300AD02EC /* RequestError.swift */,
 				FA21B04D1E221DCD00D235C7 /* Serializable.swift */,
 			);
 			path = Core;
@@ -388,6 +391,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA88691C1E2A036300AD02EC /* RequestError.swift in Sources */,
 				FA21B0501E221E0000D235C7 /* Callable.swift in Sources */,
 				FA21B0511E221E0000D235C7 /* Compose.swift in Sources */,
 				FA21B0521E221E0000D235C7 /* Deserializable.swift in Sources */,

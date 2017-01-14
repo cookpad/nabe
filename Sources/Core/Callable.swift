@@ -9,24 +9,25 @@ public extension Callable {
                            failure: @escaping (RequestError, HTTPURLResponse?) -> (),
                            parseFailure: @escaping (RequestError, HTTPURLResponse?) -> (),
                            finish: @escaping (Void) -> () = {}) -> URLSessionDataTask {
+
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let response = response as? HTTPURLResponse else {
-                let error = RequestError(kind: .unknown)
+                let error = RequestError(kind: .unknown, data: data)
                 failure(error, nil)
                 finish()
                 return
             }
 
-            let intercept = compose(Nabe.responseInterceptors.map { $0.intercept })
-            let (interceptedData, interceptedResponse) = intercept((data, response))
+            let intercept = compose2(Nabe.responseInterceptors.map { $0.intercept })
+            let interceptedResponse = intercept(response, data)
 
             if !(200..<300 ~= interceptedResponse.statusCode) {
-                let error = RequestError(kind: RequestError.ErrorKind(rawValue: interceptedResponse.statusCode)!)
+                let error = RequestError(kind: RequestError.ErrorKind(rawValue: interceptedResponse.statusCode) ?? .unknown, data: data)
                 failure(error, interceptedResponse)
-            } else if let data = interceptedData, let result = self.deserialize(data: data)  {
+            } else if let data = data, let result = self.deserialize(data)  {
                 success(result, interceptedResponse)
             } else {
-                let error = RequestError(kind: .deserialization)
+                let error = RequestError(kind: .deserialization, data: data)
                 parseFailure(error, response)
             }
             finish()
@@ -44,12 +45,12 @@ public protocol RequestCallable : RequestConstructable, Callable {
 public extension RequestCallable {
     func call(with handler: @escaping (Result<T, RequestError>, HTTPURLResponse?) -> ()) {
         guard let request = createRequest() else {
-            let error = RequestError(kind: .cannotCreateRequest)
+            let error = RequestError(kind: .invalid, data: nil)
             handler(.failure(error), nil)
             return
         }
 
-        let task = performTask(with: request, success: { parsed, response in
+        _ = performTask(with: request, success: { parsed, response in
             let result: Result<T, RequestError> = .success(parsed)
             handler((result, response))
         }, failure: { (error, response) in
@@ -59,7 +60,5 @@ public extension RequestCallable {
             let result: Result<T, RequestError> = .failure(error)
             handler((result, response))
         })
-
-        task.resume()
     }
 }

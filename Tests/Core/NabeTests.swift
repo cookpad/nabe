@@ -9,7 +9,6 @@ class NabeTests: XCTestCase {
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
 
@@ -68,6 +67,51 @@ class NabeTests: XCTestCase {
             }
         }
     }
+
+    func testCustomHTTPStatus() {
+        let status412 = HTTPBin.Status(code: 412)
+        wait { exp in
+            status412.call { result, response in
+                switch result {
+                case .success:
+                    XCTAssert(false)
+                case .failure(let error):
+                    //intentionall failed with 412
+                    XCTAssert(error.kind == .preconditionFailed)
+                }
+                exp.fulfill()
+            }
+        }
+    }
+
+    func testBasicAuthen() {
+        let basicAuth = HTTPBin.BasicAuth(username: "cookpad", password: "rocks!")
+        wait { exp in
+            basicAuth.call { result, response in
+                switch result {
+                case .success:
+                    XCTAssert(true)
+                case .failure(let error):
+                    print(error)
+                    XCTAssert(false)
+                }
+                exp.fulfill()
+            }
+        }
+
+        let failBasicAuth = HTTPBin.BasicAuth(username: "cookpad", password: "rocks!", failure: true)
+        wait { exp in
+            failBasicAuth.call { result, response in
+                switch result {
+                case .success:
+                    XCTAssert(false)
+                case .failure(let error):
+                    XCTAssert(error.kind == .unauthorized)
+                }
+                exp.fulfill()
+            }
+        }
+    }
 }
 
 struct HTTPBin {
@@ -109,6 +153,46 @@ extension HTTPBin {
         let method: HTTPMethod = .delete
         let path: String = "/delete"
         let queryParam: [String : Any] = ["foo": "bar"]
+    }
+
+    struct Status : RequestCallable {
+        typealias T = Dictionary<String, Any>
+
+        let baseURL: URL = url
+        let method: HTTPMethod = .get
+        var path: String {
+            return "/status/\(code)"
+        }
+
+        let code: Int
+
+        init(code: Int) {
+            self.code = code
+        }
+    }
+
+    struct BasicAuth : RequestCallable {
+        typealias T = Dictionary<String, Any>
+
+        let baseURL: URL = url
+        let method: HTTPMethod = .get
+        var path: String {
+            return "/basic-auth/\(username)/\(password)"
+        }
+        var header: [String : Any] {
+            let encoded = "\(username):\(password)".data(using: .utf8)?.base64EncodedString()
+            return failure ? [:] : ["Authorization": "Basic \(encoded!)"]
+        }
+
+        let username: String
+        let password: String
+        let failure: Bool
+
+        init(username: String, password: String, failure: Bool = false) {
+            self.username = username
+            self.password = password
+            self.failure = failure
+        }
     }
 }
 

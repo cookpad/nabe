@@ -7,34 +7,6 @@ public enum HTTPMethod: String {
     case delete = "DELETE"
 }
 
-public struct RequestError: Error {
-    enum ErrorKind: Int {
-        case cannotCreateRequest = -1001
-        
-        case unknown = -1
-
-        case badRequest = 400
-        case unauthorized = 401
-        case forbidden = 403
-        case notFound = 404
-        case methodNotAllowed = 405
-        case notAcceptable = 406
-        case requestTimeout = 408
-        case conflict = 409
-        case gone = 410
-
-        case internalServer = 500
-        case notImplemented = 501
-        case badGateway = 502
-        case serviceUnavailable = 503
-        case gatewayTimeout = 504
-
-        case deserialization = 999
-    }
-
-    let kind: ErrorKind
-}
-
 public protocol Request {
     var baseURL: URL { get }
     var method: HTTPMethod { get }
