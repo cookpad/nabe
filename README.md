@@ -5,25 +5,6 @@
 [![License](https://img.shields.io/cocoapods/l/Nabe.svg?style=flat)](http://cocoapods.org/pods/Nabe)
 [![Platform](https://img.shields.io/cocoapods/p/Nabe.svg?style=flat)](http://cocoapods.org/pods/Nabe)
 
-## Example
+# Status
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
-
-## Installation
-
-Nabe is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod "Nabe"
-```
-
-## Author
-
-Kittinun Vantasin, kittinun.f@gmail.com
-
-## License
-
-Nabe is available under the MIT license. See the LICENSE file for more info.
+It is still work in progress. I will update once it is kind of ready to be share.
